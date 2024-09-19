@@ -91,8 +91,11 @@ final class BrevoApiTransport extends AbstractApiTransport
         $payload = [
             'sender' => $this->formatAddress($envelope->getSender()),
             'to' => $this->formatAddresses($this->getRecipients($email, $envelope)),
-            'subject' => $email->getSubject(),
+            'payload' => null,
         ];
+        if ($subject = $email->getSubject() && !empty($subject)) {
+            $payload['subject'] = $subject;
+        }
         if ($attachements = $this->prepareAttachments($email)) {
             $payload['attachment'] = $attachements;
         }
